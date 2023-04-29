@@ -43,6 +43,7 @@ artifacts:
   files: 
     - Dockerrun.aws.json
     - coverage.xml
+    - /docs/**
 
 reports:
   test-coverage:

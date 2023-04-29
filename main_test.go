@@ -130,7 +130,7 @@ func TestServidor(t *testing.T) {
 	req, _ := http.NewRequest("GET", "/sumar?a=2&b=3", nil)
 	resp := httptest.NewRecorder()
 
-	router := crearRouter()
+	router := crearRouter("localhost:80")
 	router.ServeHTTP(resp, req)
 
 	assert.Equal(t, http.StatusOK, resp.Code)

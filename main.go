@@ -2,7 +2,9 @@ package main
 
 import (
 	"net/http"
+	"os"
 	"strconv"
+	"text/template"
 
 	_ "eafit.edu.co/asapi/docs"
 
@@ -15,18 +17,41 @@ import (
 // @version 1.0
 // @description Esta es una API simple para realizar operaciones matemáticas básicas como suma, resta, multiplicación y división.
 
-// @host localhost:80
 // @BasePath /
 func main() {
+
+	// Lee la variable de entorno "HOST"
+	host := os.Getenv("HOST")
+	if host == "" {
+		host = "localhost:80" // Utiliza un valor predeterminado si la variable de entorno no está establecida
+	}
+
+	// Carga la plantilla personalizada de Swagger
+	tmpl, err := template.ParseFiles("templates/swagger.tmpl")
+	if err != nil {
+		panic(err)
+	}
+
+	// Crea un archivo de documentación personalizado en tiempo de ejecución
+	swaggerJSON := struct {
+		Host string
+	}{
+		Host: host,
+	}
+	err = tmpl.Execute(os.Stdout, swaggerJSON)
+	if err != nil {
+		panic(err)
+	}
+
 	// Creamos un router y lo configuramos
-	router := crearRouter()
+	router := crearRouter(host)
 
 	// Iniciamos el servidor en el puerto 80
 	router.Run(":80")
 }
 
 // Función para crear un router y configurar las rutas
-func crearRouter() *gin.Engine {
+func crearRouter(host string) *gin.Engine {
 	// Creamos una nueva instancia de Gin
 	router := gin.Default()
 
@@ -36,8 +61,10 @@ func crearRouter() *gin.Engine {
 	router.GET("/multiplicar", multiplicar)
 	router.GET("/dividir", dividir)
 
-	// Establecemos la ruta para Swagger UI
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	// Con esta línea:
+	router.GET("/swagger/*any", ginSwagger.CustomWrapHandler(&ginSwagger.Config{
+		URL: "http://" + host + "/swagger/doc.json",
+	}, swaggerFiles.Handler))
 
 	return router
 }
