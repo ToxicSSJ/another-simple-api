@@ -3,10 +3,9 @@ phases:
   install:
     commands:
       - echo "Installing required packages..."
-      - go get -u github.com/stretchr/testify
-      - go get github.com/axw/gocov/gocov
-      - go get github.com/AlekSi/gocov-xml
-      - export PATH=$PATH:$GOPATH/bin
+      - go install -u github.com/stretchr/testify
+      - go install github.com/axw/gocov/gocov
+      - go install github.com/AlekSi/gocov-xml
   pre_build:
     commands:
       - echo "Running tests..."
