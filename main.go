@@ -32,6 +32,12 @@ func main() {
 		panic(err)
 	}
 
+	// Carga la plantilla de la calculadora
+	calculatorTmpl, err := template.ParseFiles("templates/calculator.tmpl")
+	if err != nil {
+		panic(err)
+	}
+
 	// Crea un archivo de documentación personalizado en tiempo de ejecución
 	swaggerJSON := struct {
 		Host string
@@ -44,14 +50,14 @@ func main() {
 	}
 
 	// Creamos un router y lo configuramos
-	router := crearRouter(host)
+	router := crearRouter(host, calculatorTmpl)
 
 	// Iniciamos el servidor en el puerto 80
 	router.Run(":80")
 }
 
 // Función para crear un router y configurar las rutas
-func crearRouter(host string) *gin.Engine {
+func crearRouter(host string, calculatorTmpl *template.Template) *gin.Engine {
 	// Creamos una nueva instancia de Gin
 	router := gin.Default()
 
@@ -60,6 +66,15 @@ func crearRouter(host string) *gin.Engine {
 	router.GET("/restar", restar)
 	router.GET("/multiplicar", multiplicar)
 	router.GET("/dividir", dividir)
+
+	// Endpoint para servir la calculadora
+	router.GET("/calculadora", func(c *gin.Context) {
+		calculatorTmpl.Execute(c.Writer, struct {
+			Host string
+		}{
+			Host: host,
+		})
+	})
 
 	// Con esta línea:
 	router.GET("/swagger/*any", ginSwagger.CustomWrapHandler(&ginSwagger.Config{

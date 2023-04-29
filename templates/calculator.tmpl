@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+  .calculator {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 1rem;
+    display: inline-block;
+  }
+  .input-group {
+    margin-bottom: 1rem;
+  }
+  input[type="number"] {
+    width: 100%;
+  }
+  select {
+    width: 100%;
+  }
+  button {
+    width: 100%;
+    padding: 0.5rem;
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  button:hover {
+    background-color: #0056b3;
+  }
+  .result {
+    margin-top: 1rem;
+  }
+</style>
+</head>
+<body>
+<div class="calculator">
+  <div class="input-group">
+    <label for="a">Número a:</label>
+    <input type="number" id="a">
+  </div>
+  <div class="input-group">
+    <label for="b">Número b:</label>
+    <input type="number" id="b">
+  </div>
+  <div class="input-group">
+    <label for="operation">Operación:</label>
+    <select id="operation">
+      <option value="sumar">Sumar</option>
+      <option value="restar">Restar</option>
+      <option value="multiplicar">Multiplicar</option>
+      <option value="dividir">Dividir</option>
+    </select>
+  </div>
+  <button onclick="calculate()">Calcular</button>
+  <div class="result" id="result"></div>
+</div>
+<script>
+  function calculate() {
+    const a = document.getElementById("a").value;
+    const b = document.getElementById("b").value;
+    const operation = document.getElementById("operation").value;
+    const resultElement = document.getElementById("result");
+
+    if (!a || !b) {
+      resultElement.textContent = "Por favor, ingresa ambos números.";
+      return;
+    }
+
+    // Usa la variable 'host' para el host y puerto de tu aplicación
+    fetch(`http://{{.Host}}/${operation}?a=${a}&b=${b}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Error en la petición");
+        }
+        return response.json();
+      })
+      .then(data => {
+        resultElement.textContent = "Resultado: " + data.resultado;
+      })
+      .catch(error => {
+        resultElement.textContent = "Error: Parámetros inválidos";
+      });
+  }
+</script>
+</body>
+</html>
