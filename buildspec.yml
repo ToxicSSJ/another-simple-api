@@ -4,10 +4,14 @@ phases:
     commands:
       - echo "Installing required packages..."
       - go get -u github.com/stretchr/testify
+      - go get github.com/axw/gocov/gocov
+      - go get github.com/AlekSi/gocov-xml
   pre_build:
     commands:
       - echo "Running tests..."
       - go test -coverprofile=coverage.out
+      - gocov convert coverage.out > coverage.json
+      - gocov-xml < coverage.json > coverage.xml
       - echo Logging in to Amazon ECR...
       - echo $CODEBUILD_SOURCE_VERSION
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin 559816800025.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
@@ -33,11 +37,11 @@ phases:
 artifacts:
   files: 
     - Dockerrun.aws.json
-    - coverage.out
+    - coverage.xml
 
 reports:
   test-coverage: # Test coverage report
     file-format: COBERTURAXML
     files:
-      - coverage.out
+      - coverage.xml
     base-directory: '.'
