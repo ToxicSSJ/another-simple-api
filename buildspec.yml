@@ -11,13 +11,18 @@ phases:
       - go test -coverprofile=coverage.out
   build:
     commands:
-      - echo "Building the application..."
-      - go build -o main
+      - echo "Logging in to Amazon ECR..."
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      - echo "Building the Docker image..."
+      - docker build -t another-simple-api .
+      - echo "Tagging the Docker image..."
+      - docker tag another-simple-api:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/another-simple-api:latest
+      - echo "Pushing the Docker image..."
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/another-simple-api:latest
 
 artifacts:
   files:
-    - main
-    - Procfile
+    - Dockerfile
     - coverage.out
 
 reports:
