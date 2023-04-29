@@ -68,7 +68,7 @@ func crearRouter(host string, calculatorTmpl *template.Template) *gin.Engine {
 	router.GET("/dividir", dividir)
 
 	// Endpoint para servir la calculadora
-	router.GET("/calculadora", func(c *gin.Context) {
+	router.GET("/calculadoratest", func(c *gin.Context) {
 		calculatorTmpl.Execute(c.Writer, struct {
 			Host string
 		}{
