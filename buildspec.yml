@@ -9,7 +9,7 @@ phases:
   pre_build:
     commands:
       - echo "Running tests..."
-      - go test -coverprofile=coverage.out
+      - go test -coverprofile coverage.out
       - gocov convert coverage.out > coverage.json
       - gocov-xml < coverage.json > coverage.xml
       - echo Logging in to Amazon ECR...
