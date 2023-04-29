@@ -1,0 +1,130 @@
+basePath: /
+host: localhost:80
+info:
+  contact: {}
+  description: Esta es una API simple para realizar operaciones matemáticas básicas
+    como suma, resta, multiplicación y división.
+  title: API de Operaciones Matemáticas
+  version: "1.0"
+paths:
+  /dividir:
+    get:
+      consumes:
+      - application/json
+      description: Divide dos números
+      parameters:
+      - description: Número a
+        in: query
+        name: a
+        required: true
+        type: number
+      - description: Número b
+        in: query
+        name: b
+        required: true
+        type: number
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: resultado
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Dividir
+  /multiplicar:
+    get:
+      consumes:
+      - application/json
+      description: Multiplica dos números
+      parameters:
+      - description: Número a
+        in: query
+        name: a
+        required: true
+        type: number
+      - description: Número b
+        in: query
+        name: b
+        required: true
+        type: number
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: resultado
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Multiplicar
+  /restar:
+    get:
+      consumes:
+      - application/json
+      description: Resta dos números
+      parameters:
+      - description: Número a
+        in: query
+        name: a
+        required: true
+        type: number
+      - description: Número b
+        in: query
+        name: b
+        required: true
+        type: number
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: resultado
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Restar
+  /sumar:
+    get:
+      consumes:
+      - application/json
+      description: Suma dos números
+      parameters:
+      - description: Número a
+        in: query
+        name: a
+        required: true
+        type: number
+      - description: Número b
+        in: query
+        name: b
+        required: true
+        type: number
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: resultado
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Sumar
+swagger: "2.0"
