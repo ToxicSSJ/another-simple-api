@@ -1,7 +1,13 @@
 version: 0.2
 phases:
+  install:
+    commands:
+      - echo "Installing required packages..."
+      - go get -u github.com/stretchr/testify
   pre_build:
     commands:
+      - echo "Running tests..."
+      - go test -coverprofile=coverage.out
       - echo Logging in to Amazon ECR...
       - echo $CODEBUILD_SOURCE_VERSION
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin 559816800025.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
@@ -23,5 +29,15 @@ phases:
       - echo Writing image definitions file...
       - printf '{"AWSEBDockerrunVersion":"1","Image":{"Name":"%s","Update":"true"},"Ports":[{"ContainerPort":80,"HostPort":80}]}' $REPOSITORY_URI:$IMAGE_TAG > Dockerrun.aws.json
       - cat Dockerrun.aws.json
+
 artifacts:
-  files: Dockerrun.aws.json
+  files: 
+    - Dockerrun.aws.json
+    - coverage.out
+
+reports:
+  test-coverage: # Test coverage report
+    file-format: COBERTURAXML
+    files:
+      - coverage.out
+    base-directory: '.'
