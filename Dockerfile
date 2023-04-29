@@ -17,7 +17,7 @@ COPY . .
 RUN go build -o main
 
 # Exponer el puerto 8080
-EXPOSE 8080
+EXPOSE 80
 
 # Comando para ejecutar la aplicación
 CMD ["/app/main"]

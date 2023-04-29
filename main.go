@@ -11,8 +11,8 @@ func main() {
 	// Creamos un router y lo configuramos
 	router := crearRouter()
 
-	// Iniciamos el servidor en el puerto 8080
-	router.Run(":8080")
+	// Iniciamos el servidor en el puerto 80
+	router.Run(":80")
 }
 
 // Función para crear un router y configurar las rutas
