@@ -2,6 +2,12 @@ version: 0.2
 phases:
   install:
     commands:
+      - echo "Installing Go 1.17..."
+      - wget https://golang.org/dl/go1.17.linux-amd64.tar.gz
+      - tar -C /usr/local -xzf go1.17.linux-amd64.tar.gz
+      - rm go1.17.linux-amd64.tar.gz
+      - export PATH=$PATH:/usr/local/go/bin
+      - go version
       - echo "Installing required packages..."
       - go get -u github.com/stretchr/testify
       - go get github.com/axw/gocov/gocov
