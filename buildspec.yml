@@ -2,22 +2,22 @@ version: 0.2
 phases:
   install:
     commands:
-      - echo "Installing Go 1.17..."
-      - wget https://golang.org/dl/go1.17.linux-amd64.tar.gz
-      - tar -C /usr/local -xzf go1.17.linux-amd64.tar.gz
-      - rm go1.17.linux-amd64.tar.gz
-      - export PATH=$PATH:/usr/local/go/bin
-      - go version
-      - echo "Installing required packages..."
+      #- echo "Installing Go 1.17..."
+      #- wget https://golang.org/dl/go1.17.linux-amd64.tar.gz
+      #- tar -C /usr/local -xzf go1.17.linux-amd64.tar.gz
+      #- rm go1.17.linux-amd64.tar.gz
+      #- export PATH=$PATH:/usr/local/go/bin
+      #- go version
+      #- echo "Installing required packages..."
       - go get -u github.com/stretchr/testify
-      - go get github.com/axw/gocov/gocov
-      - go get github.com/AlekSi/gocov-xml
+      #- go get github.com/axw/gocov/gocov
+      #- go get github.com/AlekSi/gocov-xml
   pre_build:
     commands:
       - echo "Running tests..."
-      - go test -coverprofile coverage.out
-      - gocov convert coverage.out > coverage.json
-      - gocov-xml < coverage.json > coverage.xml
+      - go test
+      #- gocov convert coverage.out > coverage.json
+      #- gocov-xml < coverage.json > coverage.xml
       - echo Logging in to Amazon ECR...
       - echo $CODEBUILD_SOURCE_VERSION
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin 559816800025.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
@@ -43,11 +43,11 @@ phases:
 artifacts:
   files: 
     - Dockerrun.aws.json
-    - coverage.xml
+    #- coverage.xml
 
-reports:
-  test-coverage: # Test coverage report
-    file-format: COBERTURAXML
-    files:
-      - coverage.xml
-    base-directory: '.'
+#reports:
+#  test-coverage: # Test coverage report
+#    file-format: COBERTURAXML
+#    files:
+#      - coverage.xml
+#    base-directory: '.'
