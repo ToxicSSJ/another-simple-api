@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"text/template"
 
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
@@ -130,7 +131,13 @@ func TestServidor(t *testing.T) {
 	req, _ := http.NewRequest("GET", "/sumar?a=2&b=3", nil)
 	resp := httptest.NewRecorder()
 
-	router := crearRouter("localhost:80")
+	// Carga la plantilla de la calculadora
+	calculatorTmpl, err := template.ParseFiles("templates/calculator.tmpl")
+	if err != nil {
+		panic(err)
+	}
+
+	router := crearRouter("localhost:80", calculatorTmpl)
 	router.ServeHTTP(resp, req)
 
 	assert.Equal(t, http.StatusOK, resp.Code)
